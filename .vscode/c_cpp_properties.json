@@ -8,8 +8,8 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "c:/Users/Mathe/Documents/PlatformIO/Projects/PI Regulateur de Tension/include",
-                "c:/Users/Mathe/Documents/PlatformIO/Projects/PI Regulateur de Tension/src",
+                "c:/Users/Mathe/Documents/MeusProjetos/PI-Regulateur-de-Tension/include",
+                "c:/Users/Mathe/Documents/MeusProjetos/PI-Regulateur-de-Tension/src",
                 "C:/Users/Mathe/.platformio/packages/framework-arduino-avr/cores/arduino",
                 "C:/Users/Mathe/.platformio/packages/framework-arduino-avr/variants/standard",
                 "C:/Users/Mathe/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
@@ -22,8 +22,8 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "c:/Users/Mathe/Documents/PlatformIO/Projects/PI Regulateur de Tension/include",
-                    "c:/Users/Mathe/Documents/PlatformIO/Projects/PI Regulateur de Tension/src",
+                    "c:/Users/Mathe/Documents/MeusProjetos/PI-Regulateur-de-Tension/include",
+                    "c:/Users/Mathe/Documents/MeusProjetos/PI-Regulateur-de-Tension/src",
                     "C:/Users/Mathe/.platformio/packages/framework-arduino-avr/cores/arduino",
                     "C:/Users/Mathe/.platformio/packages/framework-arduino-avr/variants/standard",
                     "C:/Users/Mathe/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
