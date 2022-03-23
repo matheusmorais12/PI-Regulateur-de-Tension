@@ -7,13 +7,13 @@ class PID{
 public:
   
   double error;
-  double sample;
-  double lastSample;
+  double sample; 
+  double lastSample;  
   double kP, kI, kD;      
   double P, I, D;
   double pid;
   
-  double setPoint;
+  double setPoint = 3; // Variável de controle (Valor que queremos de tensão )
   long lastProcess;
   
   PID(double _kP, double _kI, double _kD){
@@ -31,7 +31,8 @@ public:
   }
   
   double process(){
-    // Implementação P ID
+    // Implementação do PID
+
     error = setPoint - sample;
     float deltaTime = (millis() - lastProcess) / 1000.0;
     lastProcess = millis();
@@ -40,13 +41,14 @@ public:
     P = error * kP;
     
     //I
-    I = I + (error * kI) * deltaTime;
+    I += (error * kI) * deltaTime;
     
     //D
+    //Si on a besoin...
     D = (lastSample - sample) * kD / deltaTime;
     lastSample = sample;
     
-    // Soma tudo
+     
     pid = P + I + D;
     
     return pid;
@@ -56,7 +58,8 @@ public:
 #define pSENSOR         A1
 #define pCONTROLE       3
 
-PID meuPid(1.0, 0, 0);
+
+PID PID_Control(1.0, 0, 0);
 
 void setup() {
   Serial.begin(9600);
@@ -65,19 +68,19 @@ void setup() {
   pinMode(pCONTROLE, OUTPUT);
 }
 
-int controlePwm = 50;
+int controlePwm = 0;
 
 void loop() {
   
-  // Lê temperatura
-  double temperature = map(analogRead(pSENSOR), 0, 1023, 0, 100);
+  // ADC   
+  double sample = map(analogRead(pSENSOR), 0, 1023, 0, 100);
+
+  PID_Control.addNewSample(sample);
   
-  // Manda pro objeto PID!
-  meuPid.addNewSample(temperature);
   
   
-  // Converte para controle
-  controlePwm = (meuPid.process() + 50);
+  controlePwm += PID_Control.process() ;
+
   // Saída do controle
   analogWrite(pCONTROLE, controlePwm);
   
