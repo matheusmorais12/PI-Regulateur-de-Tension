@@ -1,7 +1,5 @@
 #include <Arduino.h>
-// (Really Simple) PID Class by Ivan Seidel
-// GitHub.com/ivanseidel
-// Use as you want. Leave credits
+
 
 class PID{
 public:
@@ -44,7 +42,6 @@ public:
     I += (error * kI) * deltaTime;
     
     //D
-    //Si on a besoin...
     D = (lastSample - sample) * kD / deltaTime;
     lastSample = sample;
     
