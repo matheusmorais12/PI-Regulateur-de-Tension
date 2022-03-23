@@ -7,7 +7,8 @@ public:
   double error;
   double sample; 
   double lastSample;  
-  double kP, kI, kD;      
+  double kP, kI, kD;     
+  
   double P, I, D;
   double pid;
   
@@ -73,9 +74,7 @@ void loop() {
   double sample = map(analogRead(pSENSOR), 0, 1023, 0, 100);
 
   PID_Control.addNewSample(sample);
-  
-  
-  
+   
   controlePwm += PID_Control.process() ;
 
   // Saída do controle
