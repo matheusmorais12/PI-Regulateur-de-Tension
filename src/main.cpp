@@ -1,83 +1,59 @@
 #include <Arduino.h>
 
-
-class PID{
+class PID
+{
 public:
-  
-  double error;
-  double sample; 
-  double lastSample;  
-  double kP, kI, kD;     
-  
-  double P, I, D;
-  double pid;
-  
-  double setPoint = 3; // Variável de controle (Valor que queremos de tensão )
-  long lastProcess;
-  
-  PID(double _kP, double _kI, double _kD){
-    kP = _kP;
-    kI = _kI;
-    kD = _kD;
-  }
-  
-  void addNewSample(double _sample){
-    sample = _sample;
-  }
-  
-  void setSetPoint(double _setPoint){
-    setPoint = _setPoint;
-  }
-  
-  double process(){
-    // Implementação do PID
+  double commande;
+  double consigne;
+  double mesure;
+  double alpha, beta, gama;
+  double alpha1, beta1, gama1;
+  double 
 
-    error = setPoint - sample;
-    float deltaTime = (millis() - lastProcess) / 1000.0;
-    lastProcess = millis();
-    
-    //P
-    P = error * kP;
-    
-    //I
-    I += (error * kI) * deltaTime;
-    
-    //D
-    D = (lastSample - sample) * kD / deltaTime;
-    lastSample = sample;
-    
-     
-    pid = P + I + D;
-    
-    return pid;
+  PID(double _alpha, double _beta, double _gama, double _alpha1, double _beta1, double _gama1)
+  {
+    alpha = _alpha;
+    beta = _beta;
+    gama = _gama;
+    alpha1 = _alpha1;
+    beta1 = _beta1;
+    gama1 = _gama1;
+  }
+  //Precisamos de tres variaveis para cada um, antes, o atual e o calculado. 
+  void addNewMesure(double _mesure){
+    mesure = _mesure; //leitura do sensor 
+  }
+
+  void addNewConsigne(double _consigne){
+    consigne = _consigne; //saida do controlador 
+  }
+
+  void addNewCommande(double _commande){
+    commande = _commande; //sinal entre PI e sistema
+  }
+
+
+  double Function_controled(){
+    commande = 1/alpha*(alpha*consigne-beta*consigne+gama*consigne-alpha*mesure-beta*mesure+gama*mesure+beta1*commande-gama1*mesure);
+
   }
 };
 
-#define pSENSOR         A1
-#define pCONTROLE       3
+#define Sensor A1
+#define Control 3
 
+PID pid_control(477.6, -952.4, 474.8, 1, -1.905, 0.9048);
 
-PID PID_Control(1.0, 0, 0);
-
-void setup() {
+void setup()
+{
   Serial.begin(9600);
-  
-  pinMode(pSENSOR, INPUT);
-  pinMode(pCONTROLE, OUTPUT);
+  pinMode(Sensor, INPUT);
+  pinMode(Control, OUTPUT);
 }
 
-int controlePwm = 0;
+void loop()
+{
+  double mesure = map(analogRead(Sensor), 0, 1023, 0, 3);
+  pid_control.addNewMesure(mesure);
 
-void loop() {
-  
-  // ADC   
-  double sample = map(analogRead(pSENSOR), 0, 1023, 0, 100);
-
-  PID_Control.addNewSample(sample);
-   
-  controlePwm += PID_Control.process() ;
-
-  // Saída do controle
-  analogWrite(pCONTROLE, controlePwm);
-  
 }
