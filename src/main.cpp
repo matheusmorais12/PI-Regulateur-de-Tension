@@ -3,9 +3,9 @@
 class PID
 {
 public:
-  double commande;
-  double consigne;
-  double mesure[2] = {};
+  double commande[3] = {};
+  double consigne[3] = {};
+  double mesure[3] = {};
   double alpha, beta, gama;
   double alpha1, beta1, gama1;
 
@@ -18,28 +18,33 @@ public:
     beta1 = _beta1;
     gama1 = _gama1;
   }
-  // Precisamos de tres variaveis para cada um, antes, o atual e o calculado.
-  double addNewMesure(double _mesure)
-  {
-    mesure[0] = mesure[1];
-    mesure[1] = _mesure;
 
-    return mesure
+  void addNewMesure(double _mesure)
+  {
+    mesure[2] = mesure[1];
+    mesure[1] = mesure[0];
+    mesure[0] = _mesure;
   }
 
   void addNewConsigne(double _consigne)
   {
-    consigne = _consigne; // saida do controlador
+    consigne[2] = consigne[1];
+    consigne[1] = consigne[0];
+    consigne[0] = _consigne;
   }
 
-  void addNewCommande(double _commande)
+  void addNewCommande()
   {
-    commande = _commande; // sinal entre PI e sistema
+    commande[2] = commande[1];
+    commande[1] = commande[0];
+    commande[0] = Function_controled(); 
   }
 
-  double Function_controled(double _mesure)
+  double Function_controled()
   {
-    commande = 1 / alpha1 * (alpha * consigne - beta * consigne + gama * consigne - alpha * _mesure - beta * mesure[0] + gama * mesure[1] + beta1 * commande - gama1 * commande);
+    double Tcommande = 1 / alpha1 * (alpha * consigne[0] - beta * consigne[1] + gama * consigne[2] - alpha * mesure[0] - beta * mesure[1] + gama * mesure[2] + beta1 * commande[1] - gama1 * commande[2]);
+
+    return Tcommande;
   }
 };
 
@@ -58,6 +63,5 @@ void setup()
 void loop()
 {
   double mesure = map(analogRead(Sensor), 0, 1023, 0, 3);
-  pid_control.addNewCommande(mesure);
   pid_control.addNewMesure(mesure);
 }
