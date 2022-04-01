@@ -37,14 +37,22 @@ public:
   {
     commande[2] = commande[1];
     commande[1] = commande[0];
-    commande[0] = Function_controled(); 
+    commande[0] = Function_controled();
   }
 
   double Function_controled()
   {
-    double Tcommande = 1 / alpha1 * (alpha * consigne[0] - beta * consigne[1] + gama * consigne[2] - alpha * mesure[0] - beta * mesure[1] + gama * mesure[2] + beta1 * commande[1] - gama1 * commande[2]);
+    double Tcommande = 1 / alpha1 * (alpha * consigne[0] + beta * consigne[1] + gama * consigne[2] - alpha * mesure[0] - beta * mesure[1] - gama * mesure[2] - beta1 * commande[1] - gama1 * commande[2]);
 
     return Tcommande;
+  }
+
+  double Function_system()
+  {
+    double Tmesure = 1 / alpha1 * (alpha*commande[0], beta*commande[1] + gama*commande[2]
+      - beta*mesure[1] - gama1*mesure[2];
+    
+    return Tmesure;
   }
 };
 
@@ -62,6 +70,7 @@ void setup()
 
 void loop()
 {
+
   double mesure = map(analogRead(Sensor), 0, 1023, 0, 3);
   pid_control.addNewMesure(mesure);
 }
