@@ -49,8 +49,8 @@ public:
 
   double Function_system()
   {
-    double Tmesure = 1 / alpha1 * (alpha*commande[0], beta*commande[1] + gama*commande[2]
-      - beta*mesure[1] - gama1*mesure[2];
+    double Tmesure = 1 / alpha1 * (alpha*commande[0] + beta*commande[1] + gama*commande[2]
+      - beta*mesure[1] - gama1*mesure[2]);
     
     return Tmesure;
   }
